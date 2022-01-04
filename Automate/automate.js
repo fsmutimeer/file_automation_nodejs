@@ -49,17 +49,32 @@ const getDomain = async(domains, replacerFile) => {
         //for loop for domain list
         let newDomain;
         let count = 0;
+        let replacerDomain;
         let replacerME=findMostFrequent(filteredList);
         for(let j = 0; j < replacerFile.length; j++)
         {
-            console.log(j)
+            //get the replacer domain
+            replacerDomain = replacerFile[j];
+            console.log('--------------------------')
+            console.log('im the replacr' ,count++, ' => ',replacerDomain);
+            console.log('--------------------------')
+                for(let i = 0; i < length; i++)
+                {
+                    let url = domains[i];
+                    newDomain = url.replace(replacerME, replacerDomain);
+                    domainList.push(newDomain)
+                }
+                console.log(domainList.length)
+
+
+                // when the domain iw written the write to file
+                fs.writeFile(`replaceddd.txt`, domainList.toString(), 'utf-8', function(err) {
+                    if (err) return console.log(err);
+                })
+         
+
         }
-        for(let i = 0; i < length; i++)
-        {
-            let url = domains[i];
-            newDomain = url.replace(replacerME, 'ferozshahmutimeer.com');
-            // console.log(newDomain)
-        }
+        
 
     } catch (error) {
         console.log(error)
@@ -79,7 +94,6 @@ function findMostFrequent(arr) {
                     mf = m;
                     item = arr[i];
                 }
-
             }
         }
         m = 0;
