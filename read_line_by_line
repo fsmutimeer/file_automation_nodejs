@@ -1,0 +1,74 @@
+let psl = require('psl');
+const fs = require('fs')
+const url = require('url')
+const extractDomain = require("extract-domain");
+const { parse, tldExists } = require('tldjs');
+
+var List = [];
+var newList = [];
+let count = 0;
+
+const fileHandling = async() => {
+    try {
+        //read the
+        let contents = await fs.promises.readFile('redirects.txt', 'utf-8');
+
+        contents = contents.split('\n');
+
+        // let newline = contents.split('?')
+        List.push(contents);
+        let length = List[0].length;
+        for (var i = 0; i < length - 1; i++) {
+            // console.log(count++, '=>,', List[0][i]);
+            let newurl = List[0][i]
+            let newPath = url.parse(newurl).path.split('?')
+                // console.log(newPath)
+            console.log(parse(newPath))
+                // console.log(newurl)
+                // newurl = newurl.indexOf('?') ? newurl.split('?') : '';
+
+            // console.log(newurl[1])
+
+            // var x = extractHostname(newurl[1]);
+
+
+
+
+            // console.log(count++, ' => ', extractDomain(x))
+            // console.log(x),
+
+
+        }
+        // console.log(newList)
+
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+fileHandling()
+
+
+function extractHostname(x) {
+    var hostname;
+    //find & remove protocol (http, ftp, etc.) and get hostname
+    let url = x ? x : ''
+    if (url.indexOf("//") > -1) {
+        hostname = url.split('/')[2];
+    } else {
+        hostname = url.split('/')[0];
+    }
+
+    //find & remove port number
+    hostname = hostname.split(':')[0];
+
+
+    //find & remove "?"
+    hostname = hostname.split('?')[0];
+    hostname = hostname.split('&')[0];
+    // hostname = hostname.split('=')[0];
+    hostname = extractDomain(hostname)
+
+    return hostname;
+}

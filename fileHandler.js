@@ -1,13 +1,13 @@
 const fs = require('fs');
 
-//global variables
+//global variables //getuserinput //samples
 let search = 'www.lescapadealascaux.com';
 let input = 'www.ferozshah.net';
 
 
 const replacer = new RegExp(search, 'g');
 
-//get the file
+//get the file or get from user
 var file = 'redirects.txt';
 
 //name the file
