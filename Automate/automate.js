@@ -30,9 +30,6 @@ const getDomain = async(domains, replacerFile) => {
         let length = domains.length;
         let urlPath;
         let newUrl;
-        let replacer;
-        let domain;
-
         for (let line = 0; line < length; line++) {
             urlPath = domains[line]
             urlPath = urlPath.split('=');
@@ -48,30 +45,41 @@ const getDomain = async(domains, replacerFile) => {
         }
         //for loop for domain list
         let newDomain;
-        let count = 0;
+        let count = 1;
         let replacerDomain;
         let replacerME=findMostFrequent(filteredList);
+        console.log();
+        console.log(`------------------------Replacer Started-----------------------`);
+        console.time('start time');
+        console.log()
+        console.log(`Total ${replacerFile.length} domains found in the replacer file!`);
+        console.log(`Total ${length} URLs found in the domains file!`);
+        console.log(`${length} files will be replaced...`);
+
+
         for(let j = 0; j < replacerFile.length; j++)
         {
             //get the replacer domain
             replacerDomain = replacerFile[j];
-            console.log('--------------------------')
-            console.log('im the replacr' ,count++, ' => ',replacerDomain);
-            console.log('--------------------------')
+            
                 for(let i = 0; i < length; i++)
                 {
                     let url = domains[i];
                     newDomain = url.replace(replacerME, replacerDomain);
                     domainList.push(newDomain)
                 }
-                console.log(domainList.length)
 
-
+                let filename ='domain_'+count++ +'_' + new Date().getTime() + '.txt'
+                filename = filename.toString()
                 // when the domain iw written the write to file
-                fs.writeFile(`replaceddd.txt`, domainList.toString(), 'utf-8', function(err) {
-                    if (err) return console.log(err);
-                })
-         
+               
+
+                // fs.writeFile(filename, domainList.toString(), 'utf-8', function(err) {
+                //     if (err) return console.log(err);
+                // });
+               
+                //empty the list for the next domain
+                domainList = [];
 
         }
         
