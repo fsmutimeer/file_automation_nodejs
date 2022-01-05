@@ -7,7 +7,7 @@ var filteredList = [];
 //Read and write to inmemory/list/domainList
 const autoReplacer = async() => {
     try {
-        let domains = await fs.promises.readFile('../redirects.txt', 'utf-8');
+        let domains = await fs.promises.readFile('../anchorFile.txt', 'utf-8');
         domains = domains.split('\n');
         // console.log(domains)
 
@@ -32,6 +32,8 @@ const getDomain = async(domains, replacerFile) => {
         let length = domains.length;
         let urlPath;
         let newUrl;
+
+       
         for (let line = 0; line < length; line++) {
             urlPath = domains[line]
             urlPath = urlPath.split('=');
@@ -50,6 +52,7 @@ const getDomain = async(domains, replacerFile) => {
         let count = 1;
         let replacerDomain;
         let replacerME=findTheDomainToReplace(filteredList);
+        console.log(replacerME)
         console.log();
         console.log(`------------------------Replacer Started-----------------------`);
         console.time('start time');
@@ -72,7 +75,7 @@ const getDomain = async(domains, replacerFile) => {
                     newDomain = url.replace(replacerME, replacerDomain);
                     domainList.push(newDomain)
                 }
-
+                
                 let filename ='domain_'+count++ +'_' + new Date().getTime() + '.txt'
                 filename = filename.toString()
                 // when the domain iw written the write to file
