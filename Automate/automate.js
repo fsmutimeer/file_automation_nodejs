@@ -5,7 +5,7 @@ var domainList = [];
 var filteredList = [];
 
 //Read and write to inmemory/list/domainList
-const readFile = async() => {
+const autoReplacer = async() => {
     try {
         let domains = await fs.promises.readFile('../redirects.txt', 'utf-8');
         domains = domains.split('\n');
@@ -49,7 +49,7 @@ const getDomain = async(domains, replacerFile) => {
         let newDomain;
         let count = 1;
         let replacerDomain;
-        let replacerME=findMostFrequent(filteredList);
+        let replacerME=findTheDomainToReplace(filteredList);
         console.log();
         console.log(`------------------------Replacer Started-----------------------`);
         console.time('start time');
@@ -63,7 +63,7 @@ const getDomain = async(domains, replacerFile) => {
         {
             //get the replacer domain
             replacerDomain = replacerFile[j];
-            replacerDomain =extractHostname(replacerDomain)
+            replacerDomain =extractDomain(replacerDomain)
             
             
                 for(let i = 0; i < length; i++)
@@ -86,7 +86,7 @@ const getDomain = async(domains, replacerFile) => {
                 domainList = [];
 
         }
-        console.log(`${length} files replaced...`);
+        console.log(`${length} files replaced successfully`);
 
 
     } catch (error) {
@@ -96,17 +96,17 @@ const getDomain = async(domains, replacerFile) => {
 }
 
 //find most frequent 
-function findMostFrequent(arr) {
+function findTheDomainToReplace(domain) {
     let mf = 1;
     let m = 0;
     let item;
-    for (let i = 0; i < arr.length; i++) {
-        for (let j = i; j < arr.length; j++) {
-            if (arr[i] == arr[j]) {
+    for (let i = 0; i < domain.length; i++) {
+        for (let j = i; j < domain.length; j++) {
+            if (domain[i] == domain[j]) {
                 m++;
                 if (m > mf) {
                     mf = m;
-                    item = arr[i];
+                    item = domain[i];
                 }
             }
         }
@@ -115,36 +115,24 @@ function findMostFrequent(arr) {
     return item;
 }
 
-
-function extractHostname(url) {
-    var hostname;
-    //find & remove protocol (http, ftp, etc.) and get hostname
-    // let url = x ? x : ''
+//extract the domain from the replacer file
+function extractDomain(url) {
+    var domain;
     if (url.indexOf("//") > -1) {
-        hostname = url.split('/')[2];
+        domain = url.split('/')[2];
     } else {
-        hostname = url.split('/')[0];
+        domain = url.split('/')[0];
     }
 
     //find & remove port number
-    hostname = hostname.split(':')[0];
-
-
-    //find & remove "?"
-    // hostname = hostname.split('?')[0];
-    // hostname = hostname.split('&')[0];
-    // hostname = hostname.split('=')[0];
-    // hostname = extractDomain(hostname)
-
-    return hostname;
+    domain = domain.split(':')[0];
+    return domain;
 }
 
-readFile()
+// readFile()
 
 
-// //main function 
-// (function() {
-//     //calling the readFile
-//     readFile()
-//         //calling getDoamin
-// }())
+//main function 
+(function() {
+    autoReplacer()
+}())
