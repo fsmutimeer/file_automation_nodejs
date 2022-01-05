@@ -3,7 +3,6 @@ const url = require('url');
 
 var domainList = [];
 var filteredList = [];
-var readyList = [];
 
 //Read and write to inmemory/list/domainList
 const readFile = async() => {
@@ -18,6 +17,9 @@ const readFile = async() => {
         getDomain(domains, replacerFile)
 
     } catch (error) {
+        if (error.code === 'ENOENT') {
+            return console.log('file does not exist!!!')
+        }
         console.log(error)
     }
 }
@@ -61,6 +63,8 @@ const getDomain = async(domains, replacerFile) => {
         {
             //get the replacer domain
             replacerDomain = replacerFile[j];
+            replacerDomain =extractHostname(replacerDomain)
+            
             
                 for(let i = 0; i < length; i++)
                 {
@@ -74,17 +78,19 @@ const getDomain = async(domains, replacerFile) => {
                 // when the domain iw written the write to file
                
 
-                // fs.writeFile(filename, domainList.toString(), 'utf-8', function(err) {
-                //     if (err) return console.log(err);
-                // });
+                fs.writeFile(filename, domainList.toString(), 'utf-8', function(err) {
+                    if (err) return console.log(err);
+                });
                
                 //empty the list for the next domain
                 domainList = [];
 
         }
-        
+        console.log(`${length} files replaced...`);
+
 
     } catch (error) {
+       
         console.log(error)
     }
 }
@@ -110,6 +116,28 @@ function findMostFrequent(arr) {
 }
 
 
+function extractHostname(url) {
+    var hostname;
+    //find & remove protocol (http, ftp, etc.) and get hostname
+    // let url = x ? x : ''
+    if (url.indexOf("//") > -1) {
+        hostname = url.split('/')[2];
+    } else {
+        hostname = url.split('/')[0];
+    }
+
+    //find & remove port number
+    hostname = hostname.split(':')[0];
+
+
+    //find & remove "?"
+    // hostname = hostname.split('?')[0];
+    // hostname = hostname.split('&')[0];
+    // hostname = hostname.split('=')[0];
+    // hostname = extractDomain(hostname)
+
+    return hostname;
+}
 
 readFile()
 
