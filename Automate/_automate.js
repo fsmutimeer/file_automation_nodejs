@@ -1,21 +1,21 @@
 const fs = require('fs');
 const url = require('url');
 
-
-//Read and write to inmemory/list/domainList
-
 var domainList = [];
 var filteredList = [];
 
+//main function
 const autoReplacer = async() => {
     try {
-        let domains = await fs.promises.readFile('../anchorFile.txt', 'utf-8');
+        //get the file containing all domains - from where the selective domains to replace
+        let domains = await fs.promises.readFile('../redirects.txt', 'utf-8');
         domains = domains.split('\n');
-        // console.log(domains)
 
+        //get the list of domains to place in the above file
         let replacerFile =await fs.promises.readFile('../replace.txt', 'utf-8');
         replacerFile = replacerFile.split('\n')
 
+        //call the function => pass the two files 
         getDomain(domains, replacerFile)
 
     } catch (error) {
@@ -30,12 +30,12 @@ const autoReplacer = async() => {
 
 const getDomain = async(domains, replacerFile) => {
     try {
-        // console.log(domainList[0].length);
+
         let length = domains.length;
         let urlPath;
         let newUrl;
 
-       
+       //get the domains and push to the
         for (let line = 0; line < length; line++) {
             urlPath = domains[line]
             urlPath = urlPath.split('=');
@@ -54,7 +54,7 @@ const getDomain = async(domains, replacerFile) => {
         let count = 1;
         let replacerDomain;
         let replacerME=findTheDomainToReplace(filteredList);
-        console.log(replacerME)
+
         console.log();
         console.log(`------------------------Replacer Started-----------------------`);
         console.time('start time');
