@@ -82,9 +82,7 @@ const getDomain = async(domains, replacerFile) => {
                     if (err) return console.log(err);
                 });
             
-            //    console.log(count++, domainList.join('\n'))
                 //empty the list for the next domain
-              
                 domainList = [];
 
         }
