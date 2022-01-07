@@ -1,12 +1,12 @@
 const fs = require('fs');
+const domain = require('tldjs/lib/domain');
 const url = require('url');
-
-
-//Read and write to inmemory/list/domainList
 
 var domainList = [];
 var filteredList = [];
+var finalList = [];
 
+//Read and write to inmemory/list/domainList
 const autoReplacer = async() => {
     try {
         let domains = await fs.promises.readFile('../anchorFile.txt', 'utf-8');
@@ -69,6 +69,8 @@ const getDomain = async(domains, replacerFile) => {
             //get the replacer domain
             replacerDomain = replacerFile[j];
             replacerDomain =extractDomain(replacerDomain)
+            
+            
                 for(let i = 0; i < length; i++)
                 {
                     let url = domains[i];
@@ -78,13 +80,20 @@ const getDomain = async(domains, replacerFile) => {
                 
                 let filename ='domain_'+count++ +'_' + new Date().getTime() + '.txt'
                 filename = filename.toString();
-                fs.writeFile(filename, domainList.join('\n').toString(), 'utf-8', function(err) {
+
+            
+
+                // when the domain iw written the write to file
+                
+                
+               
+
+                fs.writeFile(filename, domainList.toString(), 'utf-8', function(err) {
                     if (err) return console.log(err);
                 });
-            
-            //    console.log(count++, domainList.join('\n'))
+               
                 //empty the list for the next domain
-              
+               
                 domainList = [];
 
         }
