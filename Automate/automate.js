@@ -129,10 +129,5 @@ function extractDomain(url) {
     return domain;
 }
 
-// readFile()
-
-
-//main function 
-(function() {
-    autoReplacer()
-}())
+//call the main function
+autoReplacer()
