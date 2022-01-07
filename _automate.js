@@ -1,21 +1,21 @@
 const fs = require('fs');
-const domain = require('tldjs/lib/domain');
 const url = require('url');
 
 var domainList = [];
 var filteredList = [];
-var finalList = [];
 
-//Read and write to inmemory/list/domainList
+//main function
 const autoReplacer = async() => {
     try {
-        let domains = await fs.promises.readFile('../anchorFile.txt', 'utf-8');
+        //get the file containing all domains - from where the selective domains to replace
+        let domains = await fs.promises.readFile('../redirects.txt', 'utf-8');
         domains = domains.split('\n');
-        // console.log(domains)
 
+        //get the list of domains to place in the above file
         let replacerFile =await fs.promises.readFile('../replace.txt', 'utf-8');
         replacerFile = replacerFile.split('\n')
 
+        //call the function => pass the two files 
         getDomain(domains, replacerFile)
 
     } catch (error) {
@@ -30,12 +30,12 @@ const autoReplacer = async() => {
 
 const getDomain = async(domains, replacerFile) => {
     try {
-        // console.log(domainList[0].length);
+
         let length = domains.length;
         let urlPath;
         let newUrl;
 
-       
+       //get the domains and push to the
         for (let line = 0; line < length; line++) {
             urlPath = domains[line]
             urlPath = urlPath.split('=');
@@ -54,7 +54,7 @@ const getDomain = async(domains, replacerFile) => {
         let count = 1;
         let replacerDomain;
         let replacerME=findTheDomainToReplace(filteredList);
-        console.log(replacerME)
+
         console.log();
         console.log(`------------------------Replacer Started-----------------------`);
         console.time('start time');
@@ -69,8 +69,6 @@ const getDomain = async(domains, replacerFile) => {
             //get the replacer domain
             replacerDomain = replacerFile[j];
             replacerDomain =extractDomain(replacerDomain)
-            
-            
                 for(let i = 0; i < length; i++)
                 {
                     let url = domains[i];
@@ -80,20 +78,11 @@ const getDomain = async(domains, replacerFile) => {
                 
                 let filename ='domain_'+count++ +'_' + new Date().getTime() + '.txt'
                 filename = filename.toString();
-
-            
-
-                // when the domain iw written the write to file
-                
-                
-               
-
-                fs.writeFile(filename, domainList.toString(), 'utf-8', function(err) {
+                fs.writeFile(filename, domainList.join('\n').toString(), 'utf-8', function(err) {
                     if (err) return console.log(err);
                 });
-               
+            
                 //empty the list for the next domain
-               
                 domainList = [];
 
         }
@@ -140,10 +129,5 @@ function extractDomain(url) {
     return domain;
 }
 
-// readFile()
-
-
-//main function 
-(function() {
-    autoReplacer()
-}())
+//call the main function
+autoReplacer()
