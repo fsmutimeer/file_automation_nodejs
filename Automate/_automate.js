@@ -4,6 +4,10 @@ const url = require('url');
 var domainList = [];
 var filteredList = [];
 
+var folder = './ReplacedDomains';
+
+
+
 //main function
 const autoReplacer = async() => {
     try {
@@ -78,7 +82,13 @@ const getDomain = async(domains, replacerFile) => {
                 
                 let filename ='domain_'+count++ +'_' + new Date().getTime() + '.txt'
                 filename = filename.toString();
-                fs.writeFile(filename, domainList.join('\n').toString(), 'utf-8', function(err) {
+
+                //create a folder if does not exists
+                if (!fs.existsSync(folder)){
+                    fs.mkdirSync(folder);
+                }
+
+                fs.writeFile(folder+"/"+filename, domainList.join('\n').toString(), 'utf-8', function(err) {
                     if (err) return console.log(err);
                 });
             

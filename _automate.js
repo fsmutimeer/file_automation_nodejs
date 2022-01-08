@@ -4,6 +4,7 @@ const url = require('url');
 var domainFile = '../redirects.txt';
 var replacerDomains = '../replace.txt';
 
+
 var domainList = [];
 var filteredList = [];
 
