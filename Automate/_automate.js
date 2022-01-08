@@ -4,6 +4,8 @@ const url = require('url');
 var domainList = [];
 var filteredList = [];
 
+var domainFile = '../redirects.txt';
+var replacerDomains = '../replace.txt';
 var folder = './ReplacedDomains';
 
 
@@ -12,11 +14,11 @@ var folder = './ReplacedDomains';
 const autoReplacer = async() => {
     try {
         //get the file containing all domains - from where the selective domains to replace
-        let domains = await fs.promises.readFile('../redirects.txt', 'utf-8');
+        let domains = await fs.promises.readFile(domainFile, 'utf-8');
         domains = domains.split('\n');
 
         //get the list of domains to place in the above file
-        let replacerFile =await fs.promises.readFile('../replace.txt', 'utf-8');
+        let replacerFile =await fs.promises.readFile(replacerDomains, 'utf-8');
         replacerFile = replacerFile.split('\n')
 
         //call the function => pass the two files 
